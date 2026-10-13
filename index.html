@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sarcastic Calculator - The Condescending Compute Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-badge">
+        <span class="icon">😈</span>
+        <div>
+          <h1>ROAST-O-MATIC 3000</h1>
+          <p class="subtitle">The Calculator That Judges Your Intellect</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button id="media-manager-btn" class="pill-btn" title="Configure Custom Audio & Video reactions">
+          ⚙️ Media & Roasts
+        </button>
+        <button id="tts-toggle-btn" class="pill-btn active" title="Toggle Built-in Text-To-Speech">
+          🔊 Voice: ON
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <!-- Calculator Column -->
+      <section class="calculator-card">
+        <!-- Display Section -->
+        <div class="calc-screen">
+          <div class="screen-header">
+            <span class="calc-mode-badge" id="complexity-badge">JUDGMENT: READY</span>
+            <span class="history-preview" id="history-preview"></span>
+          </div>
+          <div class="expression-line" id="expression-display">0</div>
+          <div class="result-line" id="result-display">= 0</div>
+        </div>
+
+        <!-- Mode Toggle / Extra Functions -->
+        <div class="mode-ribbon">
+          <button class="ribbon-btn active" id="btn-show-basic">Standard</button>
+          <button class="ribbon-btn" id="btn-show-sci">Big Brain (Sci)</button>
+        </div>
+
+        <!-- Scientific Rows (Expandable/Toggleable) -->
+        <div class="sci-grid" id="sci-grid">
+          <button class="btn btn-sci" data-insert="sin(">sin</button>
+          <button class="btn btn-sci" data-insert="cos(">cos</button>
+          <button class="btn btn-sci" data-insert="tan(">tan</button>
+          <button class="btn btn-sci" data-insert="sqrt(">√</button>
+          <button class="btn btn-sci" data-insert="log(">log</button>
+          <button class="btn btn-sci" data-insert="ln(">ln</button>
+          <button class="btn btn-sci" data-insert="^">xʸ</button>
+          <button class="btn btn-sci" data-insert="!">n!</button>
+          <button class="btn btn-sci" data-insert="π">π</button>
+          <button class="btn btn-sci" data-insert="e">e</button>
+        </div>
+
+        <!-- Keypad Grid -->
+        <div class="keypad-grid">
+          <button class="btn btn-danger" id="btn-clear">AC</button>
+          <button class="btn btn-action" id="btn-backspace">⌫</button>
+          <button class="btn btn-action" data-insert="(">(</button>
+          <button class="btn btn-action" data-insert=")">)</button>
+
+          <button class="btn btn-num" data-insert="7">7</button>
+          <button class="btn btn-num" data-insert="8">8</button>
+          <button class="btn btn-num" data-insert="9">9</button>
+          <button class="btn btn-op" data-insert="÷">÷</button>
+
+          <button class="btn btn-num" data-insert="4">4</button>
+          <button class="btn btn-num" data-insert="5">5</button>
+          <button class="btn btn-num" data-insert="6">6</button>
+          <button class="btn btn-op" data-insert="×">×</button>
+
+          <button class="btn btn-num" data-insert="1">1</button>
+          <button class="btn btn-num" data-insert="2">2</button>
+          <button class="btn btn-num" data-insert="3">3</button>
+          <button class="btn btn-op" data-insert="-">−</button>
+
+          <button class="btn btn-num" data-insert="0">0</button>
+          <button class="btn btn-num" data-insert=".">.</button>
+          <button class="btn btn-num" data-insert="%">%</button>
+          <button class="btn btn-op" data-insert="+">+</button>
+
+          <button class="btn btn-equals" id="btn-equals">=</button>
+        </div>
+      </section>
+
+      <!-- Reaction & Roast Column -->
+      <section class="reaction-card" id="reaction-card">
+        <!-- Reaction Status Banner -->
+        <div class="reaction-header">
+          <div class="reaction-title-box">
+            <span class="status-indicator" id="status-indicator"></span>
+            <h2 id="reaction-title">Awaiting Your Simple Brain...</h2>
+          </div>
+          <span class="verdict-tag" id="verdict-tag">NEUTRAL</span>
+        </div>
+
+        <!-- Video & Visual Container -->
+        <div class="media-viewport" id="media-viewport">
+          <!-- Canvas Overlay for celebration confetti or dunce effects -->
+          <canvas id="reaction-canvas"></canvas>
+
+          <!-- Video Element (Hidden if no video active) -->
+          <video id="reaction-video" playsinline controls></video>
+
+          <!-- Fallback Visual Card (dynamic GIF/MEME or avatar) -->
+          <div class="fallback-visual" id="fallback-visual">
+            <div class="avatar-face" id="avatar-face">🧐</div>
+            <div class="speech-bubble" id="speech-bubble">
+              "Type something... if you can count past your 10 fingers."
+            </div>
+          </div>
+        </div>
+
+        <!-- Voice & Audio Indicator -->
+        <div class="audio-status-bar">
+          <div class="audio-wave-anim" id="audio-wave">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <span id="audio-status-label">Voice Ready</span>
+          <button class="btn-micro" id="replay-btn" title="Replay voice roast">🔁 Replay</button>
+        </div>
+
+        <!-- Roast Log / History -->
+        <div class="roast-log-container">
+          <div class="log-title">
+            <span>Hall of Shame & Glory</span>
+            <button class="clear-log-btn" id="btn-clear-log">Clear</button>
+          </div>
+          <div class="roast-log-list" id="roast-log-list">
+            <!-- Dynamically populated entries -->
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Hidden Custom Audio Element -->
+  <audio id="custom-audio-player"></audio>
+
+  <!-- Media Manager Modal Dialog -->
+  <div class="modal-backdrop" id="media-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>⚙️ Custom Voice & Video Reaction Setup</h3>
+        <button class="modal-close-btn" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Upload custom audio (MP3, WAV) and video (MP4, WebM) clips or paste direct URLs. When you calculate, the system will play your custom clips for simple insults and complex accolades!
+        </p>
+
+        <!-- Simple / Fool Reactions Settings -->
+        <div class="config-group insult-group">
+          <h4>🤬 Simple Calculation (Fool / Ridicule) Media</h4>
+          <div class="media-input-row">
+            <label>Audio Clip (Voice Ridicule):</label>
+            <input type="file" id="fool-audio-file" accept="audio/*">
+            <div class="or-divider">OR URL:</div>
+            <input type="url" id="fool-audio-url" placeholder="https://example.com/fool_roast.mp3">
+            <button class="btn-test" id="test-fool-audio">▶ Test Audio</button>
+          </div>
+
+          <div class="media-input-row">
+            <label>Video Clip (Ridicule Video):</label>
+            <input type="file" id="fool-video-file" accept="video/*">
+            <div class="or-divider">OR URL:</div>
+            <input type="url" id="fool-video-url" placeholder="https://example.com/laughing_meme.mp4">
+            <button class="btn-test" id="test-fool-video">▶ Test Video</button>
+          </div>
+        </div>
+
+        <!-- Complex / Genius Reactions Settings -->
+        <div class="config-group praise-group">
+          <h4>🎓 Complex Calculation (Praise / Congratulation) Media</h4>
+          <div class="media-input-row">
+            <label>Audio Clip (Voice Congrats):</label>
+            <input type="file" id="genius-audio-file" accept="audio/*">
+            <div class="or-divider">OR URL:</div>
+            <input type="url" id="genius-audio-url" placeholder="https://example.com/applause_congrats.mp3">
+            <button class="btn-test" id="test-genius-audio">▶ Test Audio</button>
+          </div>
+
+          <div class="media-input-row">
+            <label>Video Clip (Congratulation Video):</label>
+            <input type="file" id="genius-video-file" accept="video/*">
+            <div class="or-divider">OR URL:</div>
+            <input type="url" id="genius-video-url" placeholder="https://example.com/celebration.mp4">
+            <button class="btn-test" id="test-genius-video">▶ Test Video</button>
+          </div>
+        </div>
+
+        <!-- Complexity Threshold Configuration -->
+        <div class="config-group threshold-group">
+          <h4>⚖️ Complexity Evaluation Rules</h4>
+          <p class="hint">A calculation is considered <strong>Simple (Fool)</strong> if it's basic 1-step arithmetic like <code>5 + 2</code>, <code>10 * 3</code>, or tiny numbers. It's considered <strong>Complex</strong> if it uses scientific functions (sin, cos, sqrt, log), powers, multiple nested parentheses, or multi-step operations!</p>
+          <div class="toggle-row">
+            <label>
+              <input type="checkbox" id="auto-tts-fallback" checked>
+              Auto-generate robotic Voice Roast via Web Speech Synthesis if no audio file is uploaded
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-reset-media">Reset To Defaults</button>
+        <button class="btn-primary" id="btn-save-media">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
